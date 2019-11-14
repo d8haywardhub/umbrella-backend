@@ -1,5 +1,4 @@
 import * as express from 'express';
-//import * as http from 'http';
 
 import Controller from "../common/interfaces/controller.interface";
 import weatherService from '../weather/weather.service';
@@ -38,7 +37,6 @@ class ReportController implements Controller {
 
     private top4Customers = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         try {
-            //const customers: Customer[] = await customerService.getCustomersSorted({},{"numberOfEmployees": -1}, 4);
             const customers:any[] = await customerService.getCustomersSorted({},{"numberOfEmployees": -1}, 4);
             debugger;
             if (customers) {
@@ -65,7 +63,7 @@ class ReportController implements Controller {
     }
 
     //private addWetProperty = async (customers: Customer[]) => {
-    private addWetProperty = async (customers: any) => {
+    private addWetProperty = async (customers: any[]) => {
         let customCustomers: Customer[] = [];
         await Promise.all(customers.map(async customer => {
             const wet:boolean = await weatherService.isRainInForecast(customer.location);

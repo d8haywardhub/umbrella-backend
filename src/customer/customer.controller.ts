@@ -1,14 +1,10 @@
 import * as express from 'express';
-import * as http from 'http';
 
 import Customer from './customer.interface';
-//import CustomerModel from './customer.model';
-
 import Controller from "../common/interfaces/controller.interface";
 import customerService from './customer.service'
 import CustomersNotFoundException from '../common/exceptions/CustomerNotFoundException';
 import HttpException from '../common/exceptions/HttpException';
-import weatherService from '../weather/weather.service';
 
 class CustomerController implements Controller {
     public path:string = '/customer';
@@ -49,8 +45,6 @@ class CustomerController implements Controller {
             const customerData: Customer = req.body;
             //throw("test catch");
             const upatedCustomer = await customerService.updateCustomer(id, customerData);
-            //const isRaining = await weatherService.isRainInForecast("524901");
-            //console.log(isRaining);
             if (upatedCustomer) {
                 res.send(upatedCustomer);
             } else {

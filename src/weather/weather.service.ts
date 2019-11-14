@@ -1,7 +1,4 @@
-
 import * as http from 'http';
-
-// usage:     const weather = await weatherService.getWeather("524901");
 
 class WeatherService {
 
