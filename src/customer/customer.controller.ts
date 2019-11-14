@@ -2,15 +2,16 @@ import * as express from 'express';
 import * as http from 'http';
 
 import Customer from './customer.interface';
-import CustomerModel from './customer.model';
+//import CustomerModel from './customer.model';
 
 import Controller from "../common/interfaces/controller.interface";
 import customerService from './customer.service'
+import CustomersNotFoundException from '../common/exceptions/CustomerNotFoundException';
+import HttpException from '../common/exceptions/HttpException';
 
 class CustomerController implements Controller {
     public path:string = '/customer';
     public router = express.Router();
-    public customer:any = new CustomerModel();
 
     constructor() {
         this.initializeRoutes();
@@ -19,75 +20,58 @@ class CustomerController implements Controller {
     private initializeRoutes() {
         this.router.get(`${this.path}/customers`, this.customers);
         this.router.post(this.path, this.createCustomer);
+        this.router.patch(`${this.path}/:id`, this.modifyCustomer);         // TODO validationMiddleware(CreatePostDto, this.skipMissingProperties)
     }
 
-    private createCustomer = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+    private createCustomer = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         console.log("createCustomer... body")
-        console.log(request.body);
-        const customerData: Customer = request.body;
-        const createdPost = await customerService.createUser(customerData);
-        if (createdPost) {
-            response.send(createdPost);
-        } else {
-            //.... TBD ------> next(new HttpException(id));
-        }
+        console.log(req.body);
         
-        
-        
-        //const createdPost = await this.customer.CustomerModel.  customerService.createUser(customerData);
-
-        /*createdPost.save()
-          .then(savedPost => {
-            response.send(savedPost);
-          })
-          */
-      }
-    
-    /*
-    private modifyPost = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
-        const id = request.params.id;
-        const postData: Post = request.body;
-        const post = await this.post.postModel.findByIdAndUpdate(id, postData, { new: true });
-        if (post) {
-          response.send(post);
-        } else {
-          next(new PostNotFoundException(id));
-        }
-    }
-    */
-
-    private customers = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        //const customerData: CreateUserDto = req.body;
-        const customerData: any = req.body;
-        console.dir(customerData);
-        const { name, email, password } = customerData; //req.body && req.body.user;
-
-        //res.send({"TBD": "Implement registration"});
         try {
-
-            async function testBoolean() {
-                debugger;
-                if (!true) {
-                    return Promise.reject({ "message": "Error: test boolean failed." });
-                  }
-                  return true;
-            }
-            
-
-            if (await testBoolean()) {
-                const user = { "email": "name@gmale.com", "name": "my name" };
-                return res.json({ user }).status(200).end();
+            const customerData: Customer = req.body;
+            //throw("test catch");
+            const createdCustomer = await customerService.createCustomer(customerData);
+            if (createdCustomer) {
+                res.send(createdCustomer);
+            } else {
+              next(new CustomersNotFoundException());
             }
         } catch(error) {
-            //throw new Error(error);
-            console.log("Exception occured during registration .... error: ", error);
-            //next({status: 500, message: error.message})
-            //next(new NotAuthorizedException());
-            //next(new CustomersNotFoundException());
-            res.status(500).json({ "message": "Registration Failed" });
+            next(new HttpException(500, `unexpected error during create customer ${error}`));
         }
+
+      }
+    
+    private modifyCustomer = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        try {
+            const id = req.params.id;
+            const customerData: Customer = req.body;
+            //throw("test catch");
+            const upatedCustomer = await customerService.updateCustomer(id, customerData);
+            if (upatedCustomer) {
+                res.send(upatedCustomer);
+            } else {
+              next(new CustomersNotFoundException());
+            }
+        } catch(error) {
+            next(new HttpException(500, `unexpected error during update customer ${error}`));
+        }
+
     }
 
+    private customers = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        try {
+            const customers = await customerService.getCustomers({});
+            if (customers) {
+                res.send(customers);
+                //return res.json({ user }).status(200).end();
+            } else {
+                next(new CustomersNotFoundException());
+            }
+        } catch(error) {
+            next(new HttpException(500, `unexpected error during get users ${error}`));
+        }
+    }
 
     private getWeather = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         let rawData:string = "";

@@ -12,22 +12,24 @@ class CustomerService {
         return this.customer.customerModel.findOne({"email": email})
     }
 
+    public getCustomers = async (query: any): Promise<Customer[]> => {
+        return this.customer.customerModel.find({})
+    }
+
+    public updateCustomer = async (id: any, data: Customer): Promise<Customer> => {
+        return await this.customer.customerModel.findByIdAndUpdate(id, data, { new: true });
+    }
+
     public getCount = async (email: string): Promise<number> => {
         return this.customer.customerModel.count({"email": email})
     }
 
-    public createUser = async (customerData: any): Promise<Customer> => {
+    public createCustomer = async (customerData: any): Promise<Customer> => {
+        debugger;
         const newCustomer:Customer = customerData;
         const createdCustomer = await this.customer.customerModel.create(newCustomer);
         const savedCustomer = await createdCustomer.save();
         return savedCustomer;
-        //.then(savedPost => {
-        //  response.send(savedPost);
-        //})
-       
-       
-       
-        //return this.customer.customerModel.create(newUser);
     }
 }
 const customerService = new CustomerService();
