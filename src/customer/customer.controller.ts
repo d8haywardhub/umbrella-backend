@@ -8,6 +8,7 @@ import Controller from "../common/interfaces/controller.interface";
 import customerService from './customer.service'
 import CustomersNotFoundException from '../common/exceptions/CustomerNotFoundException';
 import HttpException from '../common/exceptions/HttpException';
+import weatherService from '../weather/weather.service';
 
 class CustomerController implements Controller {
     public path:string = '/customer';
@@ -48,6 +49,8 @@ class CustomerController implements Controller {
             const customerData: Customer = req.body;
             //throw("test catch");
             const upatedCustomer = await customerService.updateCustomer(id, customerData);
+            //const isRaining = await weatherService.isRainInForecast("524901");
+            //console.log(isRaining);
             if (upatedCustomer) {
                 res.send(upatedCustomer);
             } else {
@@ -70,42 +73,6 @@ class CustomerController implements Controller {
             }
         } catch(error) {
             next(new HttpException(500, `unexpected error during get users ${error}`));
-        }
-    }
-
-    private getWeather = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        let rawData:string = "";
-
-        try {
-            const retW:string = await new Promise((resolve, reject) => {
-
-                debugger;
-                http.get('http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=a6c21efb215eadec014e43f96506fed0', (resp: any) => {
-                    //let rawData:string = "";
-        
-                    resp.on('data', (chunk:string) => {
-                        rawData += chunk;
-                    }),
-        
-                    resp.on('end', () => {
-                        resolve(rawData);
-                    }),
-
-                    resp.on('error', (error) => {
-                        reject(error);
-                    })
-        
-                })
-
-
-
-            });
-            return res.status(200).json(JSON.parse(retW)).end();
-
-        } catch(error) {
-
-            console.log("Exception occured getting weather .... error: ", error);
-            res.status(500).json({ "message": "Get Weather Failed" });
         }
     }
 }

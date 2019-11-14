@@ -1,0 +1,7 @@
+MONGO_DOMAIN=mongodb://localhost
+MONGO_PORT=27017
+MONGO_DBNAME=umbrella
+PORT=3001
+WEBSOCKET_PORT=8081
+WEATHER_URL=url-here
+WEATHER_APPID=your-weather-id-here

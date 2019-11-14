@@ -1,10 +1,11 @@
 import CustomerController from './customer/customer.controller';
+import ReportController from './reports/report.controller';
 
 class AppControllers {
 
     private _controllers: any[] = [
-        //new PostController(),
-        new CustomerController()
+        new CustomerController(),
+        new ReportController()
     ];
 
     constructor() { }

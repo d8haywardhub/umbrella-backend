@@ -8,6 +8,8 @@ function validateEnv() {
     MONGO_DOMAIN: str(),
     MONGO_DBNAME: str(),
     MONGO_PORT: port(),
+    WEATHER_URL: str(),
+    WEATHER_APPID: str()
   });
 }
 
