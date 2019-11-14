@@ -1,0 +1,7 @@
+Fake Umbrella Project
+
+To build the server in develoment enviroment:
+npm run dev
+
+For debugging use
+nom run devdebug
