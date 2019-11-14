@@ -13,7 +13,11 @@ class CustomerService {
     }
 
     public getCustomers = async (query: any): Promise<Customer[]> => {
-        return this.customer.customerModel.find({})
+        return this.customer.customerModel.find({});
+    }
+
+    public getCustomersSorted = async (query: any, sort: any, limit: number): Promise<Customer[]> => {
+        return this.customer.customerModel.find(query).sort(sort).limit(4);
     }
 
     public updateCustomer = async (id: any, data: Customer): Promise<Customer> => {

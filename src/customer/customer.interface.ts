@@ -4,6 +4,7 @@ interface Customer {
     telephoneNumber: string;
     location: string;
     numberOfEmployees: number;
+    isWet?: boolean;
   }
   
   export default Customer;

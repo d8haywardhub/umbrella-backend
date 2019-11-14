@@ -5,7 +5,8 @@ export const customerSchemaDefinition: mongoose.SchemaDefinition = {
     personOfContact: String,
     telephoneNumber: String,
     location: String,
-    numberOfEmployees: Number
+    numberOfEmployees: Number,
+    isWet: Boolean
 };
 
 export const customerSchemaOptions: mongoose.SchemaOptions = {

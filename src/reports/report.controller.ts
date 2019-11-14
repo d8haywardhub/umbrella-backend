@@ -18,14 +18,32 @@ class ReportController implements Controller {
 
     private initializeRoutes() {
         this.router.get(`${this.path}/whereraining`, this.whereIsItRaining);
+        this.router.get(`${this.path}/top4`, this.top4Customers);
     }
     
     private whereIsItRaining = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         try {
-            const customers = await customerService.getCustomers({});
+            const customers:any[] = await customerService.getCustomers({});
             if (customers) {
                 const wetCustomers = await this.wetCustomers(customers);
                 res.send(wetCustomers);
+            } else {
+                next(new CustomersNotFoundException());
+            }
+        } catch(error) {
+            next(new HttpException(500, `unexpected error during get users ${error}`));
+        }
+
+    }
+
+    private top4Customers = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        try {
+            //const customers: Customer[] = await customerService.getCustomersSorted({},{"numberOfEmployees": -1}, 4);
+            const customers:any[] = await customerService.getCustomersSorted({},{"numberOfEmployees": -1}, 4);
+            debugger;
+            if (customers) {
+                const top4Customers = await this.addWetProperty(customers);
+                res.send(top4Customers);
             } else {
                 next(new CustomersNotFoundException());
             }
@@ -44,6 +62,17 @@ class ReportController implements Controller {
             }
         }));
         return wetCustomers;
+    }
+
+    //private addWetProperty = async (customers: Customer[]) => {
+    private addWetProperty = async (customers: any) => {
+        let customCustomers: Customer[] = [];
+        await Promise.all(customers.map(async customer => {
+            const wet:boolean = await weatherService.isRainInForecast(customer.location);
+            const newCustomer: Customer = {...customer.toObject(), "isWet": wet}
+            customCustomers.push(newCustomer);
+        }));
+        return customCustomers;
     }
 
 }
