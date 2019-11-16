@@ -1,6 +1,7 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
+import * as cors from 'cors';
 
 import Controller from './common/interfaces/controller.interface';
 import errorMiddleware from './common/middleware/error.middleware';
@@ -29,6 +30,10 @@ class App {
   private initializeMiddlewares() {
     this.app.use(bodyParser.json());
     this.app.use(loggerMiddleware);
+    this.app.use(cors({
+      origin: "http://localhost:3001",
+      credentials: true
+    }));
   }
 
   private initializeControllers(controllers: Controller[]) {

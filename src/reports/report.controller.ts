@@ -7,6 +7,16 @@ import HttpException from '../common/exceptions/HttpException';
 import customerService from '../customer/customer.service';
 import Customer from '../customer/customer.interface';
 
+interface CustomerReport {
+    name: string;
+    personOfContact: string;
+    telephoneNumber: string;
+    location: string;
+    numberOfEmployees: number;
+    isWet?: boolean;
+    whenRaining: boolean[];
+}
+
 class ReportController implements Controller {
     public path:string = '/report';
     public router = express.Router();
@@ -16,7 +26,7 @@ class ReportController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/whereraining`, this.whereIsItRaining);
+        this.router.get(`${this.path}/raining`, this.whereIsItRaining);
         this.router.get(`${this.path}/top4`, this.top4Customers);
     }
     
@@ -51,13 +61,16 @@ class ReportController implements Controller {
 
     }
 
-    private wetCustomers = async (customers: Customer[]) => {
-        let wetCustomers: Customer[] = [];
+    //private wetCustomers = async (customers: Customer[]) => {
+    private wetCustomers = async (customers: any[]) => {
+        let wetCustomers: CustomerReport[] = [];
         await Promise.all(customers.map(async customer => {
-            const wet = await weatherService.isRainInForecast(customer.location);
-            if (wet) {
-                wetCustomers.push(customer);
+            const whenRaining = await weatherService.getRainForecast(customer.location);
+            if (whenRaining && whenRaining.length > 0) {
+                const wetCustomer:CustomerReport = { ...customer.toObject(), "whenRaining": whenRaining };
+                wetCustomers.push(wetCustomer);
             }
+
         }));
         return wetCustomers;
     }

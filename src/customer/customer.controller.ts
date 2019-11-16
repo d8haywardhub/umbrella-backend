@@ -17,6 +17,7 @@ class CustomerController implements Controller {
     private initializeRoutes() {
         this.router.get(`${this.path}/customers`, this.customers);
         this.router.post(this.path, this.createCustomer);
+        this.router.post(`${this.path}/customer`, this.createCustomer);
         this.router.patch(`${this.path}/:id`, this.modifyCustomer);         // TODO validationMiddleware(CreatePostDto, this.skipMissingProperties)
     }
 
