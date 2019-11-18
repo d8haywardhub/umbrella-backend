@@ -10,7 +10,14 @@ class WeatherService {
 
         try {
             const weather:string = await new Promise((resolve, reject) => {
-                http.get(`${process.env.WEATHER_URL}?id=${location}&appid=${process.env.WEATHER_APPID}`, (resp: any) => {
+                debugger;
+                var isNum = /^\d+$/.test(location);
+                let weatherQuery = `id=${location}`;
+                if (!isNum) {
+                    weatherQuery = `q=${location}`;        // City,country
+                }
+                //http.get(`${process.env.WEATHER_URL}?id=${location}&appid=${process.env.WEATHER_APPID}`, (resp: any) => {
+                http.get(`${process.env.WEATHER_URL}?${weatherQuery}&appid=${process.env.WEATHER_APPID}`, (resp: any) => {
         
                     resp.on('data', (chunk:string) => {
                         rawData += chunk;
