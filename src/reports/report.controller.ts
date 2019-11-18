@@ -10,11 +10,11 @@ import Customer from '../customer/customer.interface';
 interface CustomerReport {
     name: string;
     personOfContact: string;
-    telephoneNumber: string;
+    phone: string;
     location: string;
     numberOfEmployees: number;
     isWet?: boolean;
-    whenRaining: boolean[];
+    whenRaining: number[];
 }
 
 class ReportController implements Controller {
@@ -48,7 +48,6 @@ class ReportController implements Controller {
     private top4Customers = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         try {
             const customers:any[] = await customerService.getCustomersSorted({},{"numberOfEmployees": -1}, 4);
-            debugger;
             if (customers) {
                 const top4Customers = await this.addWetProperty(customers);
                 res.send(top4Customers);

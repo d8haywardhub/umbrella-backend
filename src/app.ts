@@ -53,7 +53,7 @@ class App {
       MONGO_DBNAME
     } = process.env;
 
-    mongoose.connect(`${MONGO_DOMAIN}:${MONGO_PORT}/${MONGO_DBNAME}`, { "useNewUrlParser": true,  "useUnifiedTopology": true });
+    mongoose.connect(`${MONGO_DOMAIN}:${MONGO_PORT}/${MONGO_DBNAME}`, { "useNewUrlParser": true,  "useUnifiedTopology": true, "useFindAndModify": false });
     //await mongoose.connect(config.mongoUrl, { "useNewUrlParser": true,  "useUnifiedTopology": true });
 
   }

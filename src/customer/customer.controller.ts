@@ -7,7 +7,7 @@ import CustomersNotFoundException from '../common/exceptions/CustomerNotFoundExc
 import HttpException from '../common/exceptions/HttpException';
 
 class CustomerController implements Controller {
-    public path:string = '/customer';
+    public path:string = '/customers';
     public router = express.Router();
 
     constructor() {
@@ -15,16 +15,14 @@ class CustomerController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/customers`, this.customers);
-        this.router.post(this.path, this.createCustomer);
-        this.router.post(`${this.path}/customer`, this.createCustomer);
+        this.router.get(`${this.path}`, this.customers);
+        //this.router.post(this.path, this.createCustomer);
+        this.router.post(`${this.path}`, this.createCustomer);
         this.router.patch(`${this.path}/:id`, this.modifyCustomer);         // TODO validationMiddleware(CreatePostDto, this.skipMissingProperties)
+        this.router.delete(`${this.path}/:id`, this.deleteCustomer); 
     }
 
     private createCustomer = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        console.log("createCustomer... body")
-        console.log(req.body);
-        
         try {
             const customerData: Customer = req.body;
             //throw("test catch");
@@ -69,6 +67,21 @@ class CustomerController implements Controller {
         } catch(error) {
             next(new HttpException(500, `unexpected error during get users ${error}`));
         }
+    }
+
+    private deleteCustomer = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        try {
+            const id = req.params.id;
+            const upatedCustomer = await customerService.deleteCustomer(id);
+            if (upatedCustomer) {
+                res.send(upatedCustomer);
+            } else {
+              next(new CustomersNotFoundException());
+            }
+        } catch(error) {
+            next(new HttpException(500, `unexpected error during delete customer ${error}`));
+        }
+
     }
 }
 

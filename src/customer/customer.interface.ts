@@ -1,7 +1,7 @@
 interface Customer {
     name: string;
     personOfContact: string;
-    telephoneNumber: string;
+    phone: string;
     location: string;
     numberOfEmployees: number;
     isWet?: boolean;

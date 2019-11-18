@@ -8,7 +8,6 @@ class CustomerService {
     constructor() { }
 
     public getCustomer = async (email: string): Promise<Customer> => {
-        debugger;
         return this.customer.customerModel.findOne({"email": email})
     }
 
@@ -29,11 +28,14 @@ class CustomerService {
     }
 
     public createCustomer = async (customerData: any): Promise<Customer> => {
-        debugger;
         const newCustomer:Customer = customerData;
         const createdCustomer = await this.customer.customerModel.create(newCustomer);
         const savedCustomer = await createdCustomer.save();
         return savedCustomer;
+    }
+
+    public deleteCustomer = async (id: any): Promise<Customer> => {
+        return await this.customer.customerModel.findByIdAndRemove(id);
     }
 }
 const customerService = new CustomerService();

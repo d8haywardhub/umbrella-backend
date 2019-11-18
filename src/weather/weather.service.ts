@@ -35,7 +35,6 @@ class WeatherService {
     }
 
     public async isRainInForecast(location: string) {
-        let isRain = false;
         const weather:any = await this.getWeather(location);
         if (weather && weather.list && weather.list.length > 0) {
             const found = weather.list.find((item:any) => (item.weather[0].id >= 500 && item.weather[0].id < 600));
@@ -54,9 +53,9 @@ class WeatherService {
                     foundRain=true;
                     //const dateOf:Date = new Date(item.dt*1000);
                     //console.log(dateOf.toLocaleString());
-                    return item.dt;
+                    return item.dt*1000;
                 }
-                return 0;
+                //return 0;
             });
 
             if (foundRain) {

@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 export const customerSchemaDefinition: mongoose.SchemaDefinition = {
     name: String,
     personOfContact: String,
-    telephoneNumber: String,
+    phone: String,
     location: String,
     numberOfEmployees: Number,
     isWet: Boolean
