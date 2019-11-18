@@ -1,7 +1,7 @@
 # umbrella-backend
-Test project
 
 To build and run
+
 npm run dev
 or
 npm run devdebug for debugging
@@ -14,5 +14,10 @@ MONGO_PORT=27017
 MONGO_DBNAME=umbrella
 PORT=3001
 WEBSOCKET_PORT=8081
-WEATHER_URL=url-here
+WEATHER_URL=url-here                    e.g. http://api.openweathermap.org/data/2.5/forecast
 WEATHER_APPID=your-weather-id-here
+
+
+Deployment Instructions
+
+To be completed
