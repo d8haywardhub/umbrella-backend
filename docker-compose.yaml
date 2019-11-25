@@ -1,12 +1,21 @@
-version: "2"
+version: "3"
 services:
-  web:
+  app:
+    container_name: umbrella-backend-project
+    env_file:
+      - env.list
+    restart: always
     build: .
     ports:
-      - "8080:8080"
-    depends_on:
+      - "3001:3001"
+    links:
       - mongo
+    #environment:
+    #  - DEBUG
+    #depends_on:
+    #  - mongo
   mongo:
+    container_name: mongo
     image: mongo
     ports:
       - "27017:27017"
