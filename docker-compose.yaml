@@ -19,3 +19,7 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+    volumes:
+      # Persist the container's MongoDB /data/db within local host folder
+      #- ./data/db:/data/db
+      - ~/Dev/mongodb/data/db:/data/db
